@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Promotion Day - Cash Prizes</title>
+  <!-- Важно для адаптивности на мобильных устройствах -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Подключаем Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+  />
+  
+  <style>
+    /* Анимация для шариков (небольшое движение вверх-вниз) */
+    @keyframes balloonMove {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Чтобы шарики всегда шли в одну линию – используем nowrap + прокрутку (при необходимости) */
+    .balloons-row {
+      white-space: nowrap;       /* Запрещает перенос элементов на новую строку */
+      overflow-x: auto;          /* Горизонтальная прокрутка при нехватке места */
+    }
+  </style>
+</head>
+<body>
+  <!-- Контейнер для React-приложения -->
+  <div id="root"></div>
+
+  <!-- Подключаем React и ReactDOM (development-версии для наглядности) -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  
+  <!-- Babel Standalone для транспиляции JSX прямо в браузере -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Наш скрипт с JSX-кодом (обязательно type="text/babel") -->
+  <script type="text/babel">
+    /*
+      Ниже объявляем React-приложение, содержащее несколько компонентов:
+        1) App (главный)
+        2) Balloons (набор шариков)
+        3) Balloon (один шарик - изображение с анимацией)
+        4) RulesSection (правила)
+        5) AgentTable (таблица внизу)
+      
+      Теперь все 6 шариков лежат в одном "ряду" (горизонтальная полоса).
+      Под каждым шариком – текст-описание.
+    */
+
+    // Данные о шариках
+    const balloonData = [
+      { id: 1, img: "green.png",  label: "Green Baloon- $5,000 Deposit" },
+      { id: 2, img: "red.png",    label: "Red Baloon - $10,000 Deposit" },
+      { id: 3, img: "yellow.png", label: "Yellow Baloon - $10,000 Deposit" },
+      { id: 4, img: "blue.png",   label: "Blue Baloon - $25,000 Deposit" },
+      { id: 5, img: "silver.png", label: "Silver Baloon - $50,000 Deposit" },
+      { id: 6, img: "gold.png",   label: "Gold Baloon - $100,000 Deposit" }
+    ];
+
+    // Компонент Balloons – все шарики в одной горизонтальной линии
+    function Balloons() {
+      return (
+        <div className="container-fluid px-0 mb-4">
+          {/*
+            .balloons-row (см. CSS) – 
+            делает так, чтобы шарики не переносились на новую строку,
+            а при нехватке места появляется горизонтальная прокрутка.
+          */}
+          <div className="balloons-row d-flex justify-content-center">
+            {balloonData.map(item => (
+              <div 
+                key={item.id} 
+                className="text-center mx-3" // отступы по горизонтали
+                style={{ display: "inline-block" }}
+              >
+                <Balloon imageSrc={item.img} label={item.label} />
+                {/* Подпись под шариком */}
+                <div className="mt-2">{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // Компонент Balloon – один шар (PNG-картинка) с анимацией
+    function Balloon({ imageSrc, label }) {
+      const balloonStyle = {
+        width: "180px",
+        height: "210px",
+        animation: "balloonMove 3s ease-in-out infinite",
+        cursor: "pointer"
+      };
+
+      const imgStyle = {
+        width: "100%",
+        height: "100%",
+        objectFit: "contain"
+      };
+
+      return (
+        <div style={balloonStyle} title={label}>
+          <img src={imageSrc} alt={label} style={imgStyle} />
+        </div>
+      );
+    }
+
+    // Компонент с правилами
+    function RulesSection() {
+      return (
+        <div className="border rounded p-3 mb-4">
+          <h4>RULES</h4>
+          <ol>
+            <li>Minimum 5k deposit and above (Total deposits per client – so if client do 2 transactions today 2k and then another 3k will be added together and counts as 5k!)</li>
+            <li>Cards and normal Bank Transfer NOT count, EXCEPTION the South Africa that will COUNT in the Balloons Cash prize</li>
+            <li>Bintense Wire Transfer, Bintense Volt, overall any deposit through Bintense IS COUNT as Crypto so valid for the Balloons Cash prize</li>
+            <li>Deposit should be in and credited today</li>
+          </ol>
+        </div>
+      );
+    }
+
+    // Компонент таблицы агентов
+    function AgentTable({ agents }) {
+      // Определяем, какой шарик показывать по сумме
+      function getBalloonImage(deposit) {
+        if (deposit >= 100000) return "gold.png";
+        if (deposit >= 50000)  return "silver.png";
+        if (deposit >= 25000)  return "blue.png";
+        if (deposit >= 10000)  return "red.png"; // или "yellow.png"
+        if (deposit >= 5000)   return "green.png";
+        return ""; // нет шарика
+      }
+
+      const balloonContainerStyle = {
+        width: "50px",
+        height: "65px",
+        animation: "balloonMove 3s ease-in-out infinite"
+      };
+
+      const balloonImgStyle = {
+        width: "100%",
+        height: "100%",
+        objectFit: "contain"
+      };
+
+      return (
+        <div className="table-responsive mb-5">
+          <h4>Agent Deposits</h4>
+          <table className="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Agent Name</th>
+                <th>Deposit</th>
+                <th>Balloon</th>
+              </tr>
+            </thead>
+            <tbody>
+              {agents.map((agent, index) => {
+                const imgFile = getBalloonImage(agent.deposit);
+                return (
+                  <tr key={index}>
+                    <td>{agent.name}</td>
+                    <td>${agent.deposit}</td>
+                    <td>
+                      {imgFile ? (
+                        <div style={balloonContainerStyle}>
+                          <img 
+                            src={imgFile}
+                            alt={"Balloon for " + agent.name}
+                            style={balloonImgStyle}
+                          />
+                        </div>
+                      ) : (
+                        <span>No balloon</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    // Главный компонент приложения
+    function App() {
+      // Пример массива агентов
+      const agents = [
+        { name: "Jayden Cooper", deposit: 124000 },
+
+      ];
+
+      return (
+        <div className="container-fluid p-4">
+          <h1 className="text-center mb-4">PROMOTION DAY - CASH PRIZES</h1>
+          
+          {/* Горизонтальная линия шариков */}
+          <Balloons />
+          
+          {/* Правила */}
+          <RulesSection />
+
+          {/* Таблица агентов внизу */}
+          <AgentTable agents={agents} />
+        </div>
+      );
+    }
+
+    // Рендерим приложение
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+
+  <!-- Подключаем Bootstrap JS (для дополнительных компонентов, если нужно) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
