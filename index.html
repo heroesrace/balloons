@@ -1,223 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Promotion Day - Cash Prizes</title>
-  <!-- Важно для адаптивности на мобильных устройствах -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Подключаем Bootstrap CSS -->
-  <link 
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-    rel="stylesheet"
-  />
-  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All About Money!</title>
+  <!-- Animate.css для анимаций -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- FontAwesome для иконок (если понадобится) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- Canvas-Confetti для эффекта взрыва -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    /* Анимация для шариков (небольшое движение вверх-вниз) */
-    @keyframes balloonMove {
-      0%   { transform: translateY(0); }
-      50%  { transform: translateY(-20px); }
-      100% { transform: translateY(0); }
+    /* Сброс стилей */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    /* Чтобы шарики всегда шли в одну линию – используем nowrap + прокрутку (при необходимости) */
-    .balloons-row {
-      white-space: nowrap;       /* Запрещает перенос элементов на новую строку */
-      overflow-x: auto;          /* Горизонтальная прокрутка при нехватке места */
+    body {
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      text-align: center;
+      height: 100vh;
+      position: relative;
+    }
+    header {
+      padding: 50px 20px;
+      position: relative;
+      z-index: 10;
+    }
+    h1 {
+      font-size: 4em;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.5em;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    }
+    .dynamic-headline {
+      animation: dynamicText 5s infinite;
+    }
+    @keyframes dynamicText {
+      0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+      20% { transform: scale(1.2) rotate(5deg); filter: brightness(1.5); }
+      40% { transform: scale(0.9) rotate(-5deg); filter: brightness(0.8); }
+      60% { transform: scale(1.1) rotate(4deg); filter: brightness(1.6); }
+      80% { transform: scale(1) rotate(-3deg); filter: brightness(1); }
+      100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+    }
+    /* Анимация падающих монет */
+    .money-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 5;
+    }
+    .coin {
+      position: absolute;
+      font-size: 2em;
+      animation: fall linear;
+      opacity: 0.9;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+    /* Стили для биллбордов */
+    .billboard {
+      position: absolute;
+      background: rgba(0,0,0,0.7);
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      font-size: 1.5em;
+      color: #ffdf00;
+      white-space: nowrap;
+      z-index: 8;
+    }
+    /* Стили бегущей строки */
+    .ticker {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+      padding: 10px 0;
+      z-index: 15;
+    }
+    .ticker__inner {
+      display: inline-block;
+      white-space: nowrap;
+      color: #ff0;
+      font-size: 1.5em;
+      animation: ticker 15s linear infinite;
+    }
+    @keyframes ticker {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    /* Контейнер для сотрудников */
+    .employees-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .employees-container h2 {
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    /* Новые стили для карточек сотрудников */
+    .employee-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin: 10px auto;
+      max-width: 80%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s;
+    }
+    .employee-card:hover {
+      transform: scale(1.05);
+    }
+    .employee-name {
+      font-size: 1.2em;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    .dollar-sign {
+      font-size: 2em;
+      background: linear-gradient(45deg, #00ff00, #32cd32);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 8px #32cd32;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.8; }
+    }
+    .employee-amount {
+      font-size: 1.5em;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    /* Стили для блока с правилами - маленький и аккуратно в правом верхнем углу */
+    #rulesContainer {
+      position: fixed;
+      bottom: 30px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.7em;
+      color: #fff;
+      text-align: left;
+      max-width: 300px;
+      z-index: 20;
+    }
+    #rulesContainer p {
+      margin: 5px 0;
     }
   </style>
 </head>
 <body>
-  <!-- Контейнер для React-приложения -->
-  <div id="root"></div>
-
-  <!-- Подключаем React и ReactDOM (development-версии для наглядности) -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <header>
+    <h1 class="dynamic-headline">Money Makes the World Go Round!</h1>
+    <p class="animate__animated animate__flash">Unleash Your Fortune NOW!</p>
+  </header>
   
-  <!-- Babel Standalone для транспиляции JSX прямо в браузере -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Падающие монеты -->
+  <div class="money-animation" id="moneyAnimation"></div>
   
-  <!-- Наш скрипт с JSX-кодом (обязательно type="text/babel") -->
-  <script type="text/babel">
-    /*
-      Ниже объявляем React-приложение, содержащее несколько компонентов:
-        1) App (главный)
-        2) Balloons (набор шариков)
-        3) Balloon (один шарик - изображение с анимацией)
-        4) RulesSection (правила)
-        5) AgentTable (таблица внизу)
-      
-      Теперь все 6 шариков лежат в одном "ряду" (горизонтальная полоса).
-      Под каждым шариком – текст-описание.
-    */
-
-    // Данные о шариках
-    const balloonData = [
-      { id: 1, img: "green.png",  label: "Green Baloon- $5,000 Deposit" },
-      { id: 2, img: "red.png",    label: "Red Baloon - $10,000 Deposit" },
-      { id: 3, img: "yellow.png", label: "Yellow Baloon - $10,000 Deposit" },
-      { id: 4, img: "blue.png",   label: "Blue Baloon - $25,000 Deposit" },
-      { id: 5, img: "silver.png", label: "Silver Baloon - $50,000 Deposit" },
-      { id: 6, img: "gold.png",   label: "Gold Baloon - $100,000 Deposit" }
+  <!-- Биллборды -->
+  <div id="billboardContainer"></div>
+  
+  <!-- Бегущая строка -->
+  <div class="ticker">
+    <div class="ticker__inner">
+      Cash is King! &nbsp;&nbsp;&nbsp; Invest in Success! &nbsp;&nbsp;&nbsp; Make It Rain! &nbsp;&nbsp;&nbsp; Wealth Awaits You! &nbsp;&nbsp;&nbsp; Money Talks!
+    </div>
+  </div>
+  
+  <!-- Контейнер сотрудников -->
+  <div id="employeesContainer" class="employees-container">
+    <h2>Сотрудники и их вклады</h2>
+  </div>
+  
+  <!-- Блок с правилами -->
+  <div id="rulesContainer">
+    <p><strong>5000</strong> gets 5000 to their numbers does not count towards target and only get 8% on it so for example = 400$</p>
+    <p><strong>7500</strong> gets 7500 to their numbers does not count towards target and only get 8% on it so for example = 600$</p>
+    <p><strong>10,000</strong> gets 10,000 to their numbers does not count towards target and only get 8% on it so for example = 800$</p>
+    <p><strong>25,000</strong> gets 25,000 to their numbers does not count towards target and only get 8% on it so for example = 2000$</p>
+    <p><strong>50,000</strong> gets 50,000 to their numbers does not count towards target and only get 8% on it so for example = 4,000$</p>
+    <p><strong>100,000</strong> gets 150,000 to their numbers does not count towards target and only get 8% on it so for example = 12,000$</p>
+    <p><strong>RULES:</strong></p>
+    <p>Has to be all from one client</p>
+    <p>Does not count for Tim / Linda / Roberta / Nev / Damir</p>
+    <p>Deposits need to be in Crypto</p>
+  </div>
+  
+  <script>
+    // Массив денежных эмодзи
+    const moneyEmojis = ['💰', '💸', '💵', '🤑'];
+    
+    // Функция создания падающей монеты
+    function createCoin() {
+      const coin = document.createElement('div');
+      coin.classList.add('coin');
+      coin.textContent = moneyEmojis[Math.floor(Math.random() * moneyEmojis.length)];
+      coin.style.left = Math.random() * 100 + 'vw';
+      const duration = Math.random() * 4 + 3;
+      coin.style.animationDuration = duration + 's';
+      const delay = Math.random() * 2;
+      coin.style.animationDelay = delay + 's';
+      coin.style.fontSize = (Math.random() * 2 + 1) + 'em';
+      return coin;
+    }
+    
+    // Добавление монеты каждые 100 мс
+    function addCoin() {
+      const container = document.getElementById('moneyAnimation');
+      const coin = createCoin();
+      container.appendChild(coin);
+      setTimeout(() => coin.remove(), (parseFloat(coin.style.animationDuration) + parseFloat(coin.style.animationDelay)) * 1000);
+    }
+    setInterval(addCoin, 100);
+    
+    // Слоганы для биллбордов
+    const billboardSlogans = [
+      "Make It Rain!",
+      "Cash is King!",
+      "Invest in Success!",
+      "Unleash Your Wealth!",
+      "Money Talks, Bullsh*t Walks!",
+      "Your Fortune Awaits!",
+      "Live Rich, Dream Big!",
+      "Bank on Brilliance!",
+      "More Money, More Power!",
+      "Get Rich Quick!"
     ];
-
-    // Компонент Balloons – все шарики в одной горизонтальной линии
-    function Balloons() {
-      return (
-        <div className="container-fluid px-0 mb-4">
-          {/*
-            .balloons-row (см. CSS) – 
-            делает так, чтобы шарики не переносились на новую строку,
-            а при нехватке места появляется горизонтальная прокрутка.
-          */}
-          <div className="balloons-row d-flex justify-content-center">
-            {balloonData.map(item => (
-              <div 
-                key={item.id} 
-                className="text-center mx-3" // отступы по горизонтали
-                style={{ display: "inline-block" }}
-              >
-                <Balloon imageSrc={item.img} label={item.label} />
-                {/* Подпись под шариком */}
-                <div className="mt-2">{item.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
+    
+    // Функция создания биллборда
+    function createBillboard() {
+      const billboard = document.createElement('div');
+      billboard.classList.add('billboard', 'animate__animated', 'animate__fadeIn');
+      billboard.textContent = billboardSlogans[Math.floor(Math.random() * billboardSlogans.length)];
+      billboard.style.left = Math.random() * 80 + 'vw';
+      billboard.style.top = Math.random() * 70 + 10 + 'vh';
+      document.getElementById('billboardContainer').appendChild(billboard);
+      setTimeout(() => {
+        billboard.classList.replace('animate__fadeIn', 'animate__fadeOut');
+        setTimeout(() => billboard.remove(), 1000);
+      }, 3000);
     }
-
-    // Компонент Balloon – один шар (PNG-картинка) с анимацией
-    function Balloon({ imageSrc, label }) {
-      const balloonStyle = {
-        width: "180px",
-        height: "210px",
-        animation: "balloonMove 3s ease-in-out infinite",
-        cursor: "pointer"
-      };
-
-      const imgStyle = {
-        width: "100%",
-        height: "100%",
-        objectFit: "contain"
-      };
-
-      return (
-        <div style={balloonStyle} title={label}>
-          <img src={imageSrc} alt={label} style={imgStyle} />
-        </div>
-      );
+    
+    // Планирование появления биллбордов
+    function scheduleBillboard() {
+      createBillboard();
+      setTimeout(scheduleBillboard, Math.random() * 3000 + 2000);
     }
-
-    // Компонент с правилами
-    function RulesSection() {
-      return (
-        <div className="border rounded p-3 mb-4">
-          <h4>RULES</h4>
-          <ol>
-            <li>Minimum 5k deposit and above (Total deposits per client – so if client do 2 transactions today 2k and then another 3k will be added together and counts as 5k!)</li>
-            <li>Cards and normal Bank Transfer NOT count, EXCEPTION the South Africa that will COUNT in the Balloons Cash prize</li>
-            <li>Bintense Wire Transfer, Bintense Volt, overall any deposit through Bintense IS COUNT as Crypto so valid for the Balloons Cash prize</li>
-            <li>Deposit should be in and credited today</li>
-          </ol>
-        </div>
-      );
+    scheduleBillboard();
+    
+    // Денежный взрыв с canvas-confetti
+    function moneyExplosion() {
+      confetti({
+        particleCount: 200,
+        spread: 100,
+        origin: { y: 0.7 },
+        colors: ['#00FF00', '#ffd700', '#c0c0c0', '#ffffff']
+      });
     }
-
-    // Компонент таблицы агентов
-    function AgentTable({ agents }) {
-      // Определяем, какой шарик показывать по сумме
-      function getBalloonImage(deposit) {
-        if (deposit >= 100000) return "gold.png";
-        if (deposit >= 50000)  return "silver.png";
-        if (deposit >= 25000)  return "blue.png";
-        if (deposit >= 10000)  return "red.png"; // или "yellow.png"
-        if (deposit >= 5000)   return "green.png";
-        return ""; // нет шарика
-      }
-
-      const balloonContainerStyle = {
-        width: "50px",
-        height: "65px",
-        animation: "balloonMove 3s ease-in-out infinite"
-      };
-
-      const balloonImgStyle = {
-        width: "100%",
-        height: "100%",
-        objectFit: "contain"
-      };
-
-      return (
-        <div className="table-responsive mb-5">
-          <h4>Agent Deposits</h4>
-          <table className="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>Agent Name</th>
-                <th>Deposit</th>
-                <th>Balloon</th>
-              </tr>
-            </thead>
-            <tbody>
-              {agents.map((agent, index) => {
-                const imgFile = getBalloonImage(agent.deposit);
-                return (
-                  <tr key={index}>
-                    <td>{agent.name}</td>
-                    <td>${agent.deposit}</td>
-                    <td>
-                      {imgFile ? (
-                        <div style={balloonContainerStyle}>
-                          <img 
-                            src={imgFile}
-                            alt={"Balloon for " + agent.name}
-                            style={balloonImgStyle}
-                          />
-                        </div>
-                      ) : (
-                        <span>No balloon</span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      );
+    setInterval(moneyExplosion, 10000);
+    
+    // Жёстко заданный массив сотрудников
+    const employees = [
+      { name: "INKOGNITO", amount: 1000 }
+     
+    ];
+    
+    // Обновлённая функция отображения сотрудников – компактная и с анимацией
+    function renderEmployees() {
+      const container = document.getElementById('employeesContainer');
+      // Очищаем контейнер на случай повторного вызова
+      container.innerHTML = '<h2>Marathon Warriors</h2>';
+      employees.forEach(emp => {
+        const card = document.createElement('div');
+        card.classList.add('employee-card', 'animate__animated', 'animate__fadeIn');
+        card.innerHTML = `
+          <span class="employee-name">${emp.name}</span>
+          <span class="dollar-sign">$</span>
+          <span class="employee-amount">${emp.amount}</span>
+        `;
+        container.appendChild(card);
+      });
     }
-
-    // Главный компонент приложения
-    function App() {
-      // Пример массива агентов
-      const agents = [
-        { name: "Jayden Cooper", deposit: 124000 },
-
-      ];
-
-      return (
-        <div className="container-fluid p-4">
-          <h1 className="text-center mb-4">PROMOTION DAY - CASH PRIZES</h1>
-          
-          {/* Горизонтальная линия шариков */}
-          <Balloons />
-          
-          {/* Правила */}
-          <RulesSection />
-
-          {/* Таблица агентов внизу */}
-          <AgentTable agents={agents} />
-        </div>
-      );
-    }
-
-    // Рендерим приложение
-    ReactDOM.render(<App />, document.getElementById('root'));
+    
+    renderEmployees();
   </script>
-
-  <!-- Подключаем Bootstrap JS (для дополнительных компонентов, если нужно) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
