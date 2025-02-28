@@ -320,6 +320,10 @@
     }
     
     renderEmployees();
+    // Автоперезагрузка каждые 15 минут (900000 мс)
+    setInterval(() => {
+      window.location.reload();
+    }, 900000);
   </script>
 </body>
 </html>
