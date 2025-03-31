@@ -562,7 +562,7 @@
       );
     }
 
-    // Компонент таблицы агентов - оптимизированный для отображения большего количества строк
+    // Компонент таблицы агентов - оптимизированный для группировки транзакций по агенту
     function AgentTable({ agents }) {
       function getBalloonImage(deposit) {
         if (deposit >= 1000) return "gold.png";
@@ -582,6 +582,24 @@
         objectFit: "contain"
       };
 
+      // Группируем транзакции по имени агента
+      const groupedAgents = {};
+      agents.forEach(agent => {
+        if (!groupedAgents[agent.name]) {
+          groupedAgents[agent.name] = {
+            name: agent.name,
+            deposits: [agent.deposit],
+            cashPrizes: [agent.cashPrize]
+          };
+        } else {
+          groupedAgents[agent.name].deposits.push(agent.deposit);
+          groupedAgents[agent.name].cashPrizes.push(agent.cashPrize);
+        }
+      });
+
+      // Преобразуем сгруппированный объект обратно в массив
+      const consolidatedAgents = Object.values(groupedAgents);
+
       return (
         <div className="agent-table-container">
           <h4><i className="fas fa-user-tie me-2"></i>Agent Deposits</h4>
@@ -595,34 +613,45 @@
                 </tr>
               </thead>
               <tbody>
-                {agents.map((agent, index) => {
-                  const imgFile = getBalloonImage(agent.deposit);
+                {consolidatedAgents.map((agent, index) => {
                   return (
                     <tr key={index} className="agent-row">
                       <td className="agent-name">{agent.name}</td>
-                      <td className="agent-deposit">${agent.deposit.toLocaleString()}</td>
+                      <td className="agent-deposit">
+                        {agent.deposits.map((deposit, i) => (
+                          <React.Fragment key={i}>
+                            ${deposit.toLocaleString()}
+                            {i < agent.deposits.length - 1 ? ', ' : ''}
+                          </React.Fragment>
+                        ))}
+                      </td>
                       <td>
-                        {imgFile ? (
-                          <div style={{ display: "flex", alignItems: "center" }}>
-                            <div style={balloonContainerStyle}>
-                              <img 
-                                src={imgFile}
-                                alt={"Balloon for " + agent.name}
-                                style={balloonImgStyle}
-                              />
-                            </div>
-                            {agent.cashPrize && (
-                              <span className="cash-prize">
-                                <i className="fas fa-trophy me-1"></i>
-                                ${agent.cashPrize.toLocaleString()}
+                        <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "5px" }}>
+                          {agent.deposits.map((deposit, i) => {
+                            const imgFile = getBalloonImage(deposit);
+                            return imgFile ? (
+                              <div key={i} style={{ display: "flex", alignItems: "center", marginRight: "10px" }}>
+                                <div style={balloonContainerStyle}>
+                                  <img 
+                                    src={imgFile}
+                                    alt={"Balloon for " + agent.name}
+                                    style={balloonImgStyle}
+                                  />
+                                </div>
+                                {agent.cashPrizes[i] && (
+                                  <span className="cash-prize">
+                                    <i className="fas fa-trophy me-1"></i>
+                                    ${agent.cashPrizes[i].toLocaleString()}
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span key={i} className="text-muted">
+                                <i className="fas fa-times-circle me-1"></i>No balloon
                               </span>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-muted">
-                            <i className="fas fa-times-circle me-1"></i>No balloon
-                          </span>
-                        )}
+                            );
+                          })}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -674,9 +703,6 @@
         { name: "Phillip Novak", deposit: 1000, cashPrize: 150 },
         { name: "Noah Schmidt", deposit: 2000, cashPrize: 200 },
         { name: "Andrea Feni", deposit: 10000, cashPrize: 200 },
-        { name: "Mateo Magas", deposit: 1000, cashPrize: 200 },
-        { name: "Phillip Novak", deposit: 1000, cashPrize: 150 },
-        { name: "Noah Schmidt", deposit: 1000, cashPrize: 100 },
       ];
       
       // Функция для автоперезагрузки страницы каждые 15 минут
