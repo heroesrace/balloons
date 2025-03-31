@@ -388,6 +388,46 @@
     .col-lg-8, .col-lg-4 {
       padding: 0 10px;
     }
+
+    /* Стили для более компактной таблицы агентов */
+    .agent-table-container {
+      max-height: none; /* Убираем ограничение высоты, чтобы избежать скроллинга */
+      overflow-y: visible;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+    }
+
+    .table-sm thead th {
+      padding: 8px 10px;
+      font-size: 0.85rem;
+    }
+
+    .table-sm tbody td {
+      padding: 6px 10px;
+      font-size: 0.9rem;
+    }
+
+    .agent-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .agent-deposit {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .cash-prize {
+      font-size: 0.8rem;
+      padding: 2px 6px;
+      margin-left: 4px;
+    }
+
+    /* Уменьшаем отступы для оптимизации высоты */
+    .agent-table-container h4 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
   </style>
 </head>
 <body>
@@ -522,16 +562,17 @@
       );
     }
 
-    // Компонент таблицы агентов
+    // Компонент таблицы агентов - оптимизированный для отображения большего количества строк
     function AgentTable({ agents }) {
       function getBalloonImage(deposit) {
         if (deposit >= 1000) return "gold.png";
         return "";
       }
 
+      // Уменьшенный размер шариков
       const balloonContainerStyle = {
-        width: "50px",
-        height: "65px",
+        width: "35px",
+        height: "45px",
         animation: "balloonMove 3s ease-in-out infinite"
       };
 
@@ -545,12 +586,12 @@
         <div className="agent-table-container">
           <h4><i className="fas fa-user-tie me-2"></i>Agent Deposits</h4>
           <div className="table-responsive">
-            <table className="table table-bordered agent-table">
+            <table className="table table-bordered agent-table table-sm">
               <thead>
                 <tr>
-                  <th><i className="fas fa-user me-2"></i>Agent Name</th>
-                  <th><i className="fas fa-dollar-sign me-2"></i>Deposit</th>
-                  <th><i className="fas fa-certificate me-2"></i>Balloon</th>
+                  <th><i className="fas fa-user me-1"></i>Agent Name</th>
+                  <th><i className="fas fa-dollar-sign me-1"></i>Deposit</th>
+                  <th><i className="fas fa-certificate me-1"></i>Balloon</th>
                 </tr>
               </thead>
               <tbody>
