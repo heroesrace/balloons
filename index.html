@@ -6,16 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
   
   <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  />
   
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
   <style>
     /* Основные стили */
     body {
@@ -385,11 +394,22 @@
   <!-- Контейнер для React-приложения -->
   <div id="root"></div>
 
-  <!-- Подключаем React и ReactDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  
+  <!-- Подключаем React и ReactDOM (через cdnjs) -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.development.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.development.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- Babel Standalone (через cdnjs) -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.19.3/babel.min.js"
+    crossorigin="anonymous"
+  ></script>
+
   <!-- Наш скрипт с JSX-кодом -->
   <script type="text/babel">
     // Данные для отображения шаров
@@ -452,7 +472,9 @@
             {balloonData.map(item => (
               <div key={item.id} className="balloon-wrapper">
                 <Balloon imageSrc={item.img} label={item.label} />
-                <div className="balloon-label">{item.label} <span className="deposit-amount">{item.deposit}</span></div>
+                <div className="balloon-label">
+                  {item.label} <span className="deposit-amount">{item.deposit}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -550,12 +572,15 @@
                             </div>
                             {agent.cashPrize && (
                               <span className="cash-prize">
-                                <i className="fas fa-trophy me-1"></i>${agent.cashPrize.toLocaleString()}
+                                <i className="fas fa-trophy me-1"></i>
+                                ${agent.cashPrize.toLocaleString()}
                               </span>
                             )}
                           </div>
                         ) : (
-                          <span className="text-muted"><i className="fas fa-times-circle me-1"></i>No balloon</span>
+                          <span className="text-muted">
+                            <i className="fas fa-times-circle me-1"></i>No balloon
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -613,7 +638,6 @@
           window.location.reload();
         }, 900000);
         
-        // Очистка таймера при размонтировании компонента
         return () => clearTimeout(reloadTimer);
       }, []);
 
@@ -621,7 +645,9 @@
         <div className="site-wrapper">
           <Confetti />
           <h1 className="main-heading">
-            <i className="fas fa-gift me-3"></i>PROMOTION DAY - CASH PRIZES<i className="fas fa-gift ms-3"></i>
+            <i className="fas fa-gift me-3"></i>
+            PROMOTION DAY - CASH PRIZES
+            <i className="fas fa-gift ms-3"></i>
           </h1>
           <div className="container-fluid">
             <div className="row">
