@@ -1,333 +1,651 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All About Money!</title>
-  <!-- Animate.css для анимаций -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <!-- FontAwesome для иконок (если понадобится) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <!-- Canvas-Confetti для эффекта взрыва -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <meta charset="UTF-8" />
+  <title>Promotion Day - Cash Prizes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
   <style>
-    /* Сброс стилей */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    /* Основные стили */
     body {
-      background: linear-gradient(135deg, #f6d365, #fda085);
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      color: #fff;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Poppins', sans-serif;
+      padding-bottom: 20px;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      width: 100%;
+    }
+    
+    .site-wrapper {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Улучшенная анимация для шариков */
+    @keyframes balloonMove {
+      0%   { transform: translateY(0) rotate(0deg); }
+      50%  { transform: translateY(-15px) rotate(0deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+    
+    /* Основной заголовок */
+    .main-heading {
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: #2c3e50;
       text-align: center;
-      height: 100vh;
-      position: relative;
-    }
-    header {
-      padding: 50px 20px;
-      position: relative;
-      z-index: 10;
-    }
-    h1 {
-      font-size: 4em;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
       margin-bottom: 20px;
+      padding-top: 20px;
+      position: relative;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      width: 100%;
     }
-    p {
-      font-size: 1.5em;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    
+    .main-heading:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 4px;
+      background: linear-gradient(90deg, #f6d365 0%, #fda085 100%);
+      border-radius: 3px;
     }
-    .dynamic-headline {
-      animation: dynamicText 5s infinite;
+    
+    /* Стили для блока с шариками */
+    .balloons-container {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      padding: 15px;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
     }
-    @keyframes dynamicText {
-      0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
-      20% { transform: scale(1.2) rotate(5deg); filter: brightness(1.5); }
-      40% { transform: scale(0.9) rotate(-5deg); filter: brightness(0.8); }
-      60% { transform: scale(1.1) rotate(4deg); filter: brightness(1.6); }
-      80% { transform: scale(1) rotate(-3deg); filter: brightness(1); }
-      100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
-    }
-    /* Анимация падающих монет */
-    .money-animation {
+    
+    .balloons-container:before {
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 5;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ffd700, #ffaa00, #ff8800, #ffd700);
+      background-size: 200% 200%;
+      animation: shimmer 3s linear infinite;
     }
-    .coin {
+    
+    /* Стили для блока с правилами */
+    .rules-section {
+      font-size: 0.95em;
+      padding: 20px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      max-height: calc(100vh - 260px);
+      overflow-y: auto;
+      width: 100%;
+    }
+    
+    .rules-section h4 {
+      color: #2c3e50;
+      position: relative;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      display: inline-block;
+    }
+    
+    .rules-section h4:after {
+      content: '';
       position: absolute;
-      font-size: 2em;
-      animation: fall linear;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #f6d365 0%, #fda085 100%);
+    }
+    
+    .rules-section ul {
+      padding-left: 20px;
+      margin-bottom: 15px;
+      column-count: 2;
+      column-gap: 20px;
+    }
+    
+    .rules-section li {
+      margin-bottom: 6px;
+      position: relative;
+      font-size: 0.95rem;
+      break-inside: avoid;
+    }
+    
+    .rules-section p {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    
+    /* Стили для шариков в один ряд на всю ширину */
+    .balloons-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      flex-wrap: nowrap;
+      width: 100%;
+    }
+    
+    .balloon-wrapper {
+      text-align: center;
+      margin: 0;
+      flex: 1 1 0;
+      transition: all 0.3s ease;
+      padding: 0 10px;
+    }
+    
+    .balloon {
+      width: 150px;
+      height: 180px;
+      max-width: 100%;
+      margin: 0 auto;
+      animation: balloonMove 4s ease-in-out infinite;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+    }
+    
+    .balloon:hover {
+      transform: scale(1.15);
+    }
+    
+    .balloon-label {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-top: 6px;
+      font-size: 0.9rem;
       opacity: 0.9;
     }
-    @keyframes fall {
-      0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
-      10% { opacity: 1; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+
+    .deposit-amount {
+      color: #e67e22;
+      font-weight: 700;
+      display: block;
+      font-size: 1.1rem;
+      margin-top: 3px;
     }
-    /* Стили для биллбордов */
-    .billboard {
-      position: absolute;
-      background: rgba(0,0,0,0.7);
-      padding: 15px 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-      font-size: 1.5em;
-      color: #ffdf00;
-      white-space: nowrap;
-      z-index: 8;
-    }
-    /* Стили бегущей строки */
-    .ticker {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #000;
-      overflow: hidden;
-      padding: 10px 0;
-      z-index: 15;
-    }
-    .ticker__inner {
-      display: inline-block;
-      white-space: nowrap;
-      color: #ff0;
-      font-size: 1.5em;
-      animation: ticker 15s linear infinite;
-    }
-    @keyframes ticker {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-    /* Контейнер для сотрудников */
-    .employees-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 20;
-      color: #fff;
-      text-align: center;
+    
+    /* Стили для таблицы агентов */
+    .agent-table-container {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin-bottom: 20px;
+      max-height: calc(100vh - 330px);
+      overflow-y: auto;
+      width: 100%;
     }
-    .employees-container h2 {
-      font-size: 2em;
-      margin-bottom: 30px;
+    
+    .agent-table-container h4 {
+      color: #2c3e50;
+      position: relative;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      font-weight: 600;
+      font-size: 1.2rem;
     }
-    /* Новые стили для карточек сотрудников */
-    .employee-card {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 10px 20px;
+    
+    .agent-table-container h4:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, #f6d365 0%, #fda085 100%);
+    }
+    
+    .agent-table {
       border-radius: 8px;
-      margin: 10px auto;
-      max-width: 80%;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin-bottom: 0;
+      width: 100%;
     }
-    .employee-card:hover {
-      transform: scale(1.05);
-    }
-    .employee-name {
-      font-size: 1.2em;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-    .dollar-sign {
-      font-size: 2em;
-      background: linear-gradient(45deg, #00ff00, #32cd32);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 8px #32cd32;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.8; }
-    }
-    .employee-amount {
-      font-size: 1.5em;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-    /* Стили для блока с правилами - маленький и аккуратно в правом верхнем углу */
-    #rulesContainer {
-      position: fixed;
-      bottom: 30px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 0.7em;
+    
+    .agent-table thead {
+      background: linear-gradient(90deg, #f6d365 0%, #fda085 100%);
       color: #fff;
-      text-align: left;
-      max-width: 300px;
-      z-index: 20;
     }
-    #rulesContainer p {
-      margin: 5px 0;
+    
+    .agent-table thead th {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      padding: 12px 15px;
+      border: none;
+    }
+    
+    .agent-table tbody td {
+      padding: 12px 15px;
+      border-color: #eee;
+      vertical-align: middle;
+      font-size: 0.95rem;
+    }
+    
+    .agent-row {
+      transition: all 0.2s ease;
+    }
+    
+    .agent-row:hover {
+      background-color: rgba(255, 248, 220, 0.8);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .agent-name {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    
+    .agent-deposit {
+      font-weight: 700;
+      color: #e67e22;
+    }
+    
+    .cash-prize {
+      font-weight: 700;
+      color: #2ecc71;
+      background: rgba(46, 204, 113, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      display: inline-block;
+      font-size: 0.9rem;
+    }
+    
+    /* Анимации */
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    
+    /* Конфетти */
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: #ffd700;
+      opacity: 0.7;
+      border-radius: 50%;
+      animation: confettiAnimation 5s linear infinite;
+      z-index: -1;
+    }
+    
+    @keyframes confettiAnimation {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Стили для индикатора автоперезагрузки */
+    .auto-reload-indicator {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background-color: rgba(0,0,0,0.6);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      z-index: 1000;
+    }
+    
+    /* Рефакторинг для мобильных устройств */
+    @media (max-width: 992px) {
+      .site-wrapper {
+        padding: 0 10px;
+      }
+      
+      .main-heading {
+        font-size: 2rem;
+      }
+      
+      .balloon {
+        width: 130px;
+        height: 160px;
+      }
+      
+      .balloon-wrapper {
+        padding: 0 5px;
+      }
+      
+      .rules-section ul {
+        column-count: 1;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .main-heading {
+        font-size: 1.8rem;
+      }
+      
+      .balloon {
+        width: 110px;
+        height: 140px;
+      }
+      
+      .balloon-wrapper {
+        padding: 0 3px;
+      }
+      
+      .balloon-label {
+        font-size: 0.8rem;
+      }
+      
+      .deposit-amount {
+        font-size: 0.9rem;
+      }
+    }
+    
+    /* Для лучшего заполнения экрана */
+    .container-fluid {
+      padding: 0 5px;
+      width: 100%;
+    }
+    
+    .row {
+      width: 100%;
+      margin: 0;
+    }
+    
+    .col-lg-8, .col-lg-4 {
+      padding: 0 10px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1 class="dynamic-headline">Money Makes the World Go Round!</h1>
-    <p class="animate__animated animate__flash">Unleash Your Fortune NOW!</p>
-  </header>
+  <!-- Контейнер для React-приложения -->
+  <div id="root"></div>
+
+  <!-- Подключаем React и ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
   
-  <!-- Падающие монеты -->
-  <div class="money-animation" id="moneyAnimation"></div>
+  <!-- Babel Standalone для транспиляции JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   
-  <!-- Биллборды -->
-  <div id="billboardContainer"></div>
-  
-  <!-- Бегущая строка -->
-  <div class="ticker">
-    <div class="ticker__inner">
-      Cash is King! &nbsp;&nbsp;&nbsp; Invest in Success! &nbsp;&nbsp;&nbsp; Make It Rain! &nbsp;&nbsp;&nbsp; Wealth Awaits You! &nbsp;&nbsp;&nbsp; Money Talks!
-    </div>
-  </div>
-  
-  <!-- Контейнер сотрудников -->
-  <div id="employeesContainer" class="employees-container">
-    <h2>Сотрудники и их вклады</h2>
-  </div>
-  
-  <!-- Блок с правилами -->
-  <div id="rulesContainer">
-    <p><strong>5000</strong> gets 5000 to their numbers does not count towards target and only get 8% on it so for example = 400$</p>
-    <p><strong>7500</strong> gets 7500 to their numbers does not count towards target and only get 8% on it so for example = 600$</p>
-    <p><strong>10,000</strong> gets 10,000 to their numbers does not count towards target and only get 8% on it so for example = 800$</p>
-    <p><strong>25,000</strong> gets 25,000 to their numbers does not count towards target and only get 8% on it so for example = 2000$</p>
-    <p><strong>50,000</strong> gets 50,000 to their numbers does not count towards target and only get 8% on it so for example = 4,000$</p>
-    <p><strong>100,000</strong> gets 150,000 to their numbers does not count towards target and only get 8% on it so for example = 12,000$</p>
-    <p><strong>RULES:</strong></p>
-    <p>Has to be all from one client</p>
-    <p>Does not count for Tim / Linda / Roberta / Nev / Damir</p>
-    <p>Deposits need to be in Crypto</p>
-  </div>
-  
-  <script>
-    // Массив денежных эмодзи
-    const moneyEmojis = ['💰', '💸', '💵', '🤑'];
-    
-    // Функция создания падающей монеты
-    function createCoin() {
-      const coin = document.createElement('div');
-      coin.classList.add('coin');
-      coin.textContent = moneyEmojis[Math.floor(Math.random() * moneyEmojis.length)];
-      coin.style.left = Math.random() * 100 + 'vw';
-      const duration = Math.random() * 4 + 3;
-      coin.style.animationDuration = duration + 's';
-      const delay = Math.random() * 2;
-      coin.style.animationDelay = delay + 's';
-      coin.style.fontSize = (Math.random() * 2 + 1) + 'em';
-      return coin;
-    }
-    
-    // Добавление монеты каждые 100 мс
-    function addCoin() {
-      const container = document.getElementById('moneyAnimation');
-      const coin = createCoin();
-      container.appendChild(coin);
-      setTimeout(() => coin.remove(), (parseFloat(coin.style.animationDuration) + parseFloat(coin.style.animationDelay)) * 1000);
-    }
-    setInterval(addCoin, 100);
-    
-    // Слоганы для биллбордов
-    const billboardSlogans = [
-      "Make It Rain!",
-      "Cash is King!",
-      "Invest in Success!",
-      "Unleash Your Wealth!",
-      "Money Talks, Bullsh*t Walks!",
-      "Your Fortune Awaits!",
-      "Live Rich, Dream Big!",
-      "Bank on Brilliance!",
-      "More Money, More Power!",
-      "Get Rich Quick!"
+  <!-- Наш скрипт с JSX-кодом -->
+  <script type="text/babel">
+    // Данные для отображения шаров
+    const balloonData = [
+      { id: 1, img: "gold.png", deposit: "???",  label: "Gold Balloon" },
+      { id: 2, img: "gold.png", deposit: "???",  label: "Gold Balloon" },
+      { id: 3, img: "gold.png", deposit: "???",  label: "Gold Balloon" },
+      { id: 4, img: "gold.png", deposit: "???",  label: "Gold Balloon" },
+      { id: 5, img: "gold.png", deposit: "???", label: "Gold Balloon" }
     ];
-    
-    // Функция создания биллборда
-    function createBillboard() {
-      const billboard = document.createElement('div');
-      billboard.classList.add('billboard', 'animate__animated', 'animate__fadeIn');
-      billboard.textContent = billboardSlogans[Math.floor(Math.random() * billboardSlogans.length)];
-      billboard.style.left = Math.random() * 80 + 'vw';
-      billboard.style.top = Math.random() * 70 + 10 + 'vh';
-      document.getElementById('billboardContainer').appendChild(billboard);
-      setTimeout(() => {
-        billboard.classList.replace('animate__fadeIn', 'animate__fadeOut');
-        setTimeout(() => billboard.remove(), 1000);
-      }, 3000);
+
+    // Конфетти компонент
+    function Confetti() {
+      const [confetti, setConfetti] = React.useState([]);
+      
+      React.useEffect(() => {
+        // Создаем 20 частиц конфетти
+        const confettiElements = [];
+        const colors = ['#ffd700', '#ff6b6b', '#48dbfb', '#1dd1a1', '#f368e0', '#ff9f43'];
+        
+        for (let i = 0; i < 20; i++) {
+          confettiElements.push({
+            id: i,
+            left: `${Math.random() * 100}%`,
+            size: `${Math.random() * 10 + 5}px`,
+            backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+            delay: `${Math.random() * 5}s`,
+            duration: `${Math.random() * 3 + 3}s`,
+          });
+        }
+        
+        setConfetti(confettiElements);
+      }, []);
+      
+      return (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: -1 }}>
+          {confetti.map(item => (
+            <div 
+              key={item.id}
+              className="confetti"
+              style={{
+                left: item.left,
+                width: item.size,
+                height: item.size,
+                backgroundColor: item.backgroundColor,
+                animationDelay: item.delay,
+                animationDuration: item.duration
+              }}
+            />
+          ))}
+        </div>
+      );
     }
-    
-    // Планирование появления биллбордов
-    function scheduleBillboard() {
-      createBillboard();
-      setTimeout(scheduleBillboard, Math.random() * 3000 + 2000);
+
+    // Компонент Balloons – отображает полосу золотых шаров в один ряд по горизонтали на всю ширину
+    function Balloons() {
+      return (
+        <div className="balloons-container">
+          <div className="balloons-row">
+            {balloonData.map(item => (
+              <div key={item.id} className="balloon-wrapper">
+                <Balloon imageSrc={item.img} label={item.label} />
+                <div className="balloon-label">{item.label} <span className="deposit-amount">{item.deposit}</span></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
     }
-    scheduleBillboard();
-    
-    // Денежный взрыв с canvas-confetti
-    function moneyExplosion() {
-      confetti({
-        particleCount: 200,
-        spread: 100,
-        origin: { y: 0.7 },
-        colors: ['#00FF00', '#ffd700', '#c0c0c0', '#ffffff']
-      });
+
+    // Компонент Balloon – один золотой шар
+    function Balloon({ imageSrc, label }) {
+      return (
+        <div className="balloon" title={label}>
+          <img 
+            src={imageSrc} 
+            alt={label} 
+            style={{ width: "100%", height: "100%", objectFit: "contain" }} 
+          />
+        </div>
+      );
     }
-    setInterval(moneyExplosion, 10000);
-    
-    // Жёстко заданный массив сотрудников
-    const employees = [
-      { name: "Mateo Magas", amount: 5000 },
-      { name: "Adam Levi", amount: 10000 },
-      { name: "Andrea Lombardi", amount: 10000 },
-      { name: "Alexander Hublin", amount: 5000 },
-      { name: "Alexander Hublin", amount: 5000 },
-      { name: "Leandro Goldberg", amount: 10000 }
-    ];
-    
-    // Обновлённая функция отображения сотрудников – компактная и с анимацией
-    function renderEmployees() {
-      const container = document.getElementById('employeesContainer');
-      // Очищаем контейнер на случай повторного вызова
-      container.innerHTML = '<h2>Marathon Warriors</h2>';
-      employees.forEach(emp => {
-        const card = document.createElement('div');
-        card.classList.add('employee-card', 'animate__animated', 'animate__fadeIn');
-        card.innerHTML = `
-          <span class="employee-name">${emp.name}</span>
-          <span class="dollar-sign">$</span>
-          <span class="employee-amount">${emp.amount}</span>
-        `;
-        container.appendChild(card);
-      });
+
+    // Компонент RulesSection – блок с правилами
+    function RulesSection() {
+      return (
+        <div className="rules-section">
+          <h4><i className="fas fa-scroll me-2"></i>RULES</h4>
+          <p>There are all the same color ballons and anyone can pop any ballon if they make a deposit or have a POP.</p>
+          <p><strong>Deposit amounts accepted and added to commission payments:</strong></p>
+          <ul>
+            <li>$1,000</li>
+            <li>$2,500</li>
+            <li>$5,000</li>
+            <li>$7,500</li>
+            <li>$10,000</li>
+            <li>$12,500</li>
+            <li>$15,000</li>
+            <li>$20,000</li>
+            <li>$25,000</li>
+            <li>$35,000</li>
+            <li>$50,000</li>
+            <li>$75,000</li>
+            <li>$100,000</li>
+          </ul>
+          <p><strong>All the amount needs to be from one client.</strong></p>
+        </div>
+      );
     }
-    
-    renderEmployees();
-    // Автоперезагрузка каждые 15 минут (900000 мс)
-    setInterval(() => {
-      window.location.reload();
-    }, 900000);
+
+    // Компонент таблицы агентов
+    function AgentTable({ agents }) {
+      function getBalloonImage(deposit) {
+        if (deposit >= 1000) return "gold.png";
+        return "";
+      }
+
+      const balloonContainerStyle = {
+        width: "50px",
+        height: "65px",
+        animation: "balloonMove 3s ease-in-out infinite"
+      };
+
+      const balloonImgStyle = {
+        width: "100%",
+        height: "100%",
+        objectFit: "contain"
+      };
+
+      return (
+        <div className="agent-table-container">
+          <h4><i className="fas fa-user-tie me-2"></i>Agent Deposits</h4>
+          <div className="table-responsive">
+            <table className="table table-bordered agent-table">
+              <thead>
+                <tr>
+                  <th><i className="fas fa-user me-2"></i>Agent Name</th>
+                  <th><i className="fas fa-dollar-sign me-2"></i>Deposit</th>
+                  <th><i className="fas fa-certificate me-2"></i>Balloon</th>
+                </tr>
+              </thead>
+              <tbody>
+                {agents.map((agent, index) => {
+                  const imgFile = getBalloonImage(agent.deposit);
+                  return (
+                    <tr key={index} className="agent-row">
+                      <td className="agent-name">{agent.name}</td>
+                      <td className="agent-deposit">${agent.deposit.toLocaleString()}</td>
+                      <td>
+                        {imgFile ? (
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                            <div style={balloonContainerStyle}>
+                              <img 
+                                src={imgFile}
+                                alt={"Balloon for " + agent.name}
+                                style={balloonImgStyle}
+                              />
+                            </div>
+                            {agent.cashPrize && (
+                              <span className="cash-prize">
+                                <i className="fas fa-trophy me-1"></i>${agent.cashPrize.toLocaleString()}
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-muted"><i className="fas fa-times-circle me-1"></i>No balloon</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    // Компонент индикатора автоперезагрузки
+    function AutoReloadIndicator() {
+      const [timeLeft, setTimeLeft] = React.useState(900);
+      
+      React.useEffect(() => {
+        const interval = setInterval(() => {
+          setTimeLeft(prevTime => {
+            if (prevTime <= 1) {
+              window.location.reload();
+              return 900;
+            }
+            return prevTime - 1;
+          });
+        }, 1000);
+        
+        return () => clearInterval(interval);
+      }, []);
+      
+      // Форматирование времени
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      
+      return (
+        <div className="auto-reload-indicator">
+          <i className="fas fa-sync-alt me-2"></i>
+          Page reload in: {minutes}:{seconds < 10 ? '0' : ''}{seconds}
+        </div>
+      );
+    }
+
+    // Главный компонент приложения
+    function App() {
+      const agents = [
+        { name: "Michele Zito", deposit: 3000, cashPrize: 100 },
+        { name: "Andrea Feni", deposit: 10000, cashPrize: 100 },
+        { name: "Alexander Hublin", deposit: 7500, cashPrize: 150 },
+      ];
+      
+      // Функция для автоперезагрузки страницы каждые 15 минут
+      React.useEffect(() => {
+        // 15 минут = 900000 миллисекунд
+        const reloadTimer = setTimeout(() => {
+          window.location.reload();
+        }, 900000);
+        
+        // Очистка таймера при размонтировании компонента
+        return () => clearTimeout(reloadTimer);
+      }, []);
+
+      return (
+        <div className="site-wrapper">
+          <Confetti />
+          <h1 className="main-heading">
+            <i className="fas fa-gift me-3"></i>PROMOTION DAY - CASH PRIZES<i className="fas fa-gift ms-3"></i>
+          </h1>
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-lg-8">
+                <Balloons />
+                <AgentTable agents={agents} />
+              </div>
+              <div className="col-lg-4">
+                <RulesSection />
+              </div>
+            </div>
+          </div>
+          <AutoReloadIndicator />
+        </div>
+      );
+    }
+
+    // Рендерим приложение
+    ReactDOM.render(<App />, document.getElementById('root'));
   </script>
+
+  <!-- Подключаем Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
